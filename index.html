@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Manutenções - Autoescola</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+    h1, h2 { color: #333; text-align: center; }
+    label, select, input, button { display: block; margin: 10px auto; }
+    .hidden { display: none; }
+    .btn { margin: 10px; padding: 10px 20px; background: #007bff; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+    .btn:hover { background: #0056b3; }
+    .container { margin-top: 40px; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 90%; max-width: 800px; }
+    .section { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+    th { background-color: #007bff; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Controle de Manutenções - Autoescola</h1>
+
+    <!-- Campo de seleção do veículo -->
+    <label for="veiculo">Selecione o veículo:</label>
+    <select id="veiculo">
+      <option value="">-- Escolha --</option>
+      <option value="veiculo1">Fiat Mobi - Placa X</option>
+      <option value="veiculo2">Celta - Placa Y</option>
+    </select>
+
+    <!-- Botões de ação (aparecem após seleção do veículo) -->
+    <div id="acoes" class="hidden">
+      <button class="btn" onclick="mostrarHistorico()">Consultar Histórico</button>
+      <button class="btn" onclick="mostrarCadastro()">Cadastrar Manutenção</button>
+      <button class="btn" onclick="mostrarAgendamento()">Agendar Manutenção</button>
+    </div>
+
+    <!-- Seção de histórico (preenchida dinamicamente) -->
+    <div id="historico" class="section hidden">
+      <h2>Histórico de Manutenções</h2>
+      <div id="historicoConteudo"></div>
+    </div>
+
+    <!-- Seção para cadastrar manutenção -->
+    <div id="cadastro" class="section hidden">
+      <h2>Cadastrar Manutenção</h2>
+      <label for="tipoManutencao">Tipo de manutenção:</label>
+      <select id="tipoManutencao" onchange="mostrarCamposCadastro()">
+        <option value="">-- Escolha --</option>
+        <option value="oleo">Troca de óleo</option>
+        <option value="pastilhas">Verificação e troca das pastilhas</option>
+        <option value="suspensao">Suspensão</option>
+        <option value="pneus">Pneus</option>
+      </select>
+
+      <!-- Campos dinâmicos exibidos após escolha da manutenção -->
+      <div id="dadosCadastro" class="hidden">
+        <label>Informe a data da troca:</label>
+        <input type="date">
+
+        <label>Informe a quilometragem do carro no momento da troca:</label>
+        <input type="number" placeholder="Ex: 45000">
+      </div>
+    </div>
+
+    <!-- Seção para agendar manutenção -->
+    <div id="agendamento" class="section hidden">
+      <h2>Agendar Manutenção</h2>
+      <label for="tipoAgendamento">Tipo de manutenção:</label>
+      <select id="tipoAgendamento">
+        <option value="oleo">Troca de óleo</option>
+        <option value="pastilhas">Verificação e troca das pastilhas</option>
+        <option value="suspensao">Suspensão</option>
+        <option value="pneus">Pneus</option>
+      </select>
+
+      <label>Digite a data para agendamento:</label>
+      <input type="date">
+    </div>
+  </div>
+
+  <script>
+    const veiculoSelect = document.getElementById('veiculo');
+    const acoesDiv = document.getElementById('acoes');
+
+    // Exibe os botões de ação quando um veículo é selecionado
+    veiculoSelect.addEventListener('change', () => {
+      if (veiculoSelect.value) {
+        acoesDiv.classList.remove('hidden');
+      } else {
+        acoesDiv.classList.add('hidden');
+      }
+      document.getElementById('cadastro').classList.add('hidden');
+      document.getElementById('agendamento').classList.add('hidden');
+      document.getElementById('historico').classList.add('hidden');
+    });
+
+    // Exibe o histórico conforme o veículo escolhido, com dados fictícios
+    function mostrarHistorico() {
+      const historico = document.getElementById('historico');
+      const conteudo = document.getElementById('historicoConteudo');
+      const veiculo = veiculoSelect.value;
+
+      let html = '';
+      if (veiculo === 'veiculo1') {
+        html = `
+          <h3>Fiat Mobi - Placa X</h3>
+          <table>
+            <tr><th>Tipo</th><th>Data</th><th>Quilometragem</th></tr>
+            <tr><td>Troca de Óleo</td><td>2024-12-15</td><td>12.000 km</td></tr>
+            <tr><td>Troca de Óleo</td><td>2025-06-10</td><td>18.000 km</td></tr>
+            <tr><td>Pneus</td><td>2024-12-05</td><td>11.500 km</td></tr>
+            <tr><td>Pneus</td><td>2025-06-01</td><td>17.000 km</td></tr>
+            <tr><td>Suspensão</td><td>2024-11-20</td><td>12.800 km</td></tr>
+            <tr><td>Suspensão</td><td>2025-05-15</td><td>19.000 km</td></tr>
+            <tr><td>Pastilhas</td><td>2024-12-28</td><td>13.000 km</td></tr>
+            <tr><td>Pastilhas</td><td>2025-06-20</td><td>20.000 km</td></tr>
+          </table>
+        `;
+      } else if (veiculo === 'veiculo2') {
+        html = `
+          <h3>Celta - Placa Y</h3>
+          <table>
+            <tr><th>Tipo</th><th>Data</th><th>Quilometragem</th></tr>
+            <tr><td>Troca de Óleo</td><td>2024-12-10</td><td>124.000 km</td></tr>
+            <tr><td>Troca de Óleo</td><td>2025-06-05</td><td>130.500 km</td></tr>
+            <tr><td>Pneus</td><td>2024-11-28</td><td>125.000 km</td></tr>
+            <tr><td>Pneus</td><td>2025-05-30</td><td>132.800 km</td></tr>
+            <tr><td>Suspensão</td><td>2024-12-18</td><td>126.300 km</td></tr>
+            <tr><td>Suspensão</td><td>2025-06-10</td><td>134.000 km</td></tr>
+            <tr><td>Pastilhas</td><td>2024-12-22</td><td>127.000 km</td></tr>
+            <tr><td>Pastilhas</td><td>2025-06-28</td><td>135.000 km</td></tr>
+          </table>
+        `;
+      }
+      conteudo.innerHTML = html;
+      historico.classList.remove('hidden');
+      document.getElementById('cadastro').classList.add('hidden');
+      document.getElementById('agendamento').classList.add('hidden');
+    }
+
+    // Exibe a seção de cadastro de manutenção
+    function mostrarCadastro() {
+      document.getElementById('cadastro').classList.remove('hidden');
+      document.getElementById('agendamento').classList.add('hidden');
+      document.getElementById('historico').classList.add('hidden');
+      document.getElementById('dadosCadastro').classList.add('hidden');
+    }
+
+    // Exibe a seção de agendamento de manutenção
+    function mostrarAgendamento() {
+      document.getElementById('agendamento').classList.remove('hidden');
+      document.getElementById('cadastro').classList.add('hidden');
+      document.getElementById('historico').classList.add('hidden');
+    }
+
+    // Exibe os campos adicionais após selecionar o tipo de manutenção
+    function mostrarCamposCadastro() {
+      const tipo = document.getElementById('tipoManutencao').value;
+      if (tipo) {
+        document.getElementById('dadosCadastro').classList.remove('hidden');
+      } else {
+        document.getElementById('dadosCadastro').classList.add('hidden');
+      }
+    }
+  </script>
+</body>
+</html>
