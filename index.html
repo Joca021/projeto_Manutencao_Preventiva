@@ -1,20 +1,57 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sistema de Manutenções - Autoescola</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
     h1, h2 { color: #333; text-align: center; }
     label, select, input, button { display: block; margin: 10px auto; }
     .hidden { display: none; }
-    .btn { margin: 10px; padding: 10px 20px; background: #007bff; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+    .btn {
+      margin: 10px;
+      padding: 10px 20px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
     .btn:hover { background: #0056b3; }
-    .container { margin-top: 40px; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 90%; max-width: 800px; }
-    .section { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+    .container {
+      margin-top: 40px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 800px;
+    }
+    .section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #ccc;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
     th { background-color: #007bff; color: #fff; }
   </style>
 </head>
@@ -37,10 +74,11 @@
       <button class="btn" onclick="mostrarAgendamento()">Agendar Manutenção</button>
     </div>
 
-    <!-- Seção de histórico (preenchida dinamicamente) -->
+    <!-- Seção de histórico -->
     <div id="historico" class="section hidden">
       <h2>Histórico de Manutenções</h2>
       <div id="historicoConteudo"></div>
+      <button class="btn" onclick="voltarInicio()">Voltar para página inicial</button>
     </div>
 
     <!-- Seção para cadastrar manutenção -->
@@ -55,7 +93,6 @@
         <option value="pneus">Pneus</option>
       </select>
 
-      <!-- Campos dinâmicos exibidos após escolha da manutenção -->
       <div id="dadosCadastro" class="hidden">
         <label>Informe a data da troca:</label>
         <input type="date">
@@ -63,6 +100,8 @@
         <label>Informe a quilometragem do carro no momento da troca:</label>
         <input type="number" placeholder="Ex: 45000">
       </div>
+
+      <button class="btn" onclick="salvarCadastro()">Salvar</button>
     </div>
 
     <!-- Seção para agendar manutenção -->
@@ -78,6 +117,8 @@
 
       <label>Digite a data para agendamento:</label>
       <input type="date">
+
+      <button class="btn" onclick="salvarAgendamento()">Salvar</button>
     </div>
   </div>
 
@@ -85,7 +126,7 @@
     const veiculoSelect = document.getElementById('veiculo');
     const acoesDiv = document.getElementById('acoes');
 
-    // Exibe os botões de ação quando um veículo é selecionado
+    // Exibe os botões após seleção do veículo
     veiculoSelect.addEventListener('change', () => {
       if (veiculoSelect.value) {
         acoesDiv.classList.remove('hidden');
@@ -97,7 +138,7 @@
       document.getElementById('historico').classList.add('hidden');
     });
 
-    // Exibe o histórico conforme o veículo escolhido, com dados fictícios
+    // Mostrar histórico do veículo
     function mostrarHistorico() {
       const historico = document.getElementById('historico');
       const conteudo = document.getElementById('historicoConteudo');
@@ -135,13 +176,14 @@
           </table>
         `;
       }
+
       conteudo.innerHTML = html;
       historico.classList.remove('hidden');
       document.getElementById('cadastro').classList.add('hidden');
       document.getElementById('agendamento').classList.add('hidden');
     }
 
-    // Exibe a seção de cadastro de manutenção
+    // Exibir tela de cadastro
     function mostrarCadastro() {
       document.getElementById('cadastro').classList.remove('hidden');
       document.getElementById('agendamento').classList.add('hidden');
@@ -149,14 +191,14 @@
       document.getElementById('dadosCadastro').classList.add('hidden');
     }
 
-    // Exibe a seção de agendamento de manutenção
+    // Exibir tela de agendamento
     function mostrarAgendamento() {
       document.getElementById('agendamento').classList.remove('hidden');
       document.getElementById('cadastro').classList.add('hidden');
       document.getElementById('historico').classList.add('hidden');
     }
 
-    // Exibe os campos adicionais após selecionar o tipo de manutenção
+    // Mostrar campos ao escolher o tipo de manutenção
     function mostrarCamposCadastro() {
       const tipo = document.getElementById('tipoManutencao').value;
       if (tipo) {
@@ -164,6 +206,27 @@
       } else {
         document.getElementById('dadosCadastro').classList.add('hidden');
       }
+    }
+
+    // Botão "Salvar" no cadastro
+    function salvarCadastro() {
+      alert("Manutenção cadastrada com sucesso!");
+      voltarInicio();
+    }
+
+    // Botão "Salvar" no agendamento
+    function salvarAgendamento() {
+      alert("Manutenção agendada com sucesso!");
+      voltarInicio();
+    }
+
+    // Voltar para a página inicial
+    function voltarInicio() {
+      veiculoSelect.value = "";
+      acoesDiv.classList.add('hidden');
+      document.getElementById('cadastro').classList.add('hidden');
+      document.getElementById('agendamento').classList.add('hidden');
+      document.getElementById('historico').classList.add('hidden');
     }
   </script>
 </body>
