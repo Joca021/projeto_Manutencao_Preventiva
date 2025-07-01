@@ -16,5 +16,5 @@ Este projeto consiste no desenvolvimento de uma aplicação web simples para o c
 - **CSS3** para estilização e layout responsivo.
 - **JavaScript** para interatividade e manipulação dinâmica do conteúdo.
 
-Sobre o Projeto
+Sobre o Projeto:
 Este sistema foi desenvolvido como parte de um trabalho acadêmico para facilitar o controle das manutenções em uma autoescola, tornando o processo mais simples e acessível mesmo com tecnologias básicas. O código é comentado para facilitar o entendimento e possíveis melhorias.
